@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenVivaLauncher", "OpenVivaLauncher\OpenVivaLauncher.csproj", "{CBF32F2D-812F-4FA8-8838-E94288DA7CC4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CBF32F2D-812F-4FA8-8838-E94288DA7CC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBF32F2D-812F-4FA8-8838-E94288DA7CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBF32F2D-812F-4FA8-8838-E94288DA7CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBF32F2D-812F-4FA8-8838-E94288DA7CC4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BE761099-3C0B-4F97-83DB-B47933E29741}
+	EndGlobalSection
+EndGlobal
