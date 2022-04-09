@@ -25,10 +25,20 @@ namespace OpenVivaLauncher
 				onAppUninstall: OnAppUninstall,
 				onEveryRun: OnAppRun);
 
+			SquirrelStartup().GetAwaiter().GetResult(); //allow squirrel startup to run async
 			ServiceCollection services = new ServiceCollection();
 			ConfigureServices(services);
 			_serviceProvider = services.BuildServiceProvider();
 
+		}
+
+		private async Task SquirrelStartup()
+		{
+			string repourl = "https://github/Openviva/OpenVivaLauncher";
+			using (var mgr = new GithubUpdateManager(repourl))
+			{
+				await mgr.UpdateApp();
+			}
 		}
 
 		private void ConfigureServices(ServiceCollection services)
