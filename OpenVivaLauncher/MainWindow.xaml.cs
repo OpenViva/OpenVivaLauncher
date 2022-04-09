@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Semver;
 
 namespace OpenVivaLauncher
 {
@@ -20,9 +21,100 @@ namespace OpenVivaLauncher
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		public MainWindow()
+		private SemVersion SelectedVersion { get { return ((SemVersion)this.VersionDropDown.SelectedItem); } }
+
+		private bool _versionInstalled = false;
+
+		private readonly GithubService _githubService;
+		private readonly GameService _gameService;
+		public MainWindow(GithubService github, GameService gameService)
 		{
 			InitializeComponent();
+
+			this._githubService = github;
+			this._gameService = gameService;
+
+			_gameService.DownloadProgressChanged += _gameService_DownloadProgressChanged;
+			_gameService.DownloadComplete += _gameService_DownloadComplete;
+		}
+
+		private void _gameService_DownloadComplete(object? sender, System.Net.DownloadDataCompletedEventArgs e)
+		{
+			
+		}
+
+		private void _gameService_DownloadProgressChanged(object? sender, System.Net.DownloadProgressChangedEventArgs e)
+		{
+			this.ProgressBar.Minimum = 0;
+			this.ProgressBar.Maximum = e.TotalBytesToReceive;
+			this.ProgressBar.Value = e.BytesReceived;
+		}
+
+		private void Window_OnLoaded(object sender, RoutedEventArgs e)
+		{
+			
+		}
+
+		private void Window_OnMouseDown(object sender, MouseButtonEventArgs e)
+		{
+
+		}
+
+		private async void LaunchButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			if (_versionInstalled)
+			{
+				
+			}
+			else
+			{
+				this.LaunchButton.IsEnabled = false;
+				this.VersionDropDown.IsEnabled = false;
+				var releases = await _githubService.GetReleasesAsync();
+				string versionKey = releases.FirstOrDefault(x => x.Value == SelectedVersion).Key;
+				await _gameService.InstallGameVersion(versionKey);
+				this.LaunchButton.IsEnabled = true;
+				this.VersionDropDown.IsEnabled = true;
+			}
+		}
+
+		private async void VersionDropDown_OnLoaded(object sender, RoutedEventArgs e)
+		{
+			var releases = await _githubService.GetReleasesAsync();
+			this.VersionDropDown.ItemsSource = releases.Values.ToArray();
+			this.VersionDropDown.SelectedIndex = 0;
+		}
+		private async void VersionDropDown_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			
+			if (_gameService.CheckGameInstalled(SelectedVersion.ToString()))
+			{
+				this.LaunchButton.Content = "Play";
+				this._versionInstalled = true;
+			}
+			else
+			{
+				this.LaunchButton.Content = "Download";
+				this._versionInstalled = false;
+			}
+		}
+		private async void Close_OnClick(object sender, RoutedEventArgs e)
+		{
+			Environment.Exit(0);
+		}
+
+		private void DoVersionChangeUiChange()
+		{
+			if (_gameService.CheckGameInstalled(SelectedVersion.ToString()))
+			{
+				this.LaunchButton.Content = "Play";
+				this._versionInstalled = true;
+			}
+			else
+			{
+				this.LaunchButton.Content = "Download";
+				this._versionInstalled = false;
+			}
 		}
 	}
 }

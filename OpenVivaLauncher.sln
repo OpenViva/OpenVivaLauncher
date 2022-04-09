@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenVivaLauncher", "OpenVivaLauncher\OpenVivaLauncher.csproj", "{CBF32F2D-812F-4FA8-8838-E94288DA7CC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{21CBBE50-8925-498D-9B33-2334C6ADAE43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{CBF32F2D-812F-4FA8-8838-E94288DA7CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBF32F2D-812F-4FA8-8838-E94288DA7CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBF32F2D-812F-4FA8-8838-E94288DA7CC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21CBBE50-8925-498D-9B33-2334C6ADAE43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21CBBE50-8925-498D-9B33-2334C6ADAE43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21CBBE50-8925-498D-9B33-2334C6ADAE43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21CBBE50-8925-498D-9B33-2334C6ADAE43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

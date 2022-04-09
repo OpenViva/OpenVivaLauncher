@@ -1,9 +1,21 @@
 ﻿<Application x:Class="OpenVivaLauncher.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:OpenVivaLauncher"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:local="clr-namespace:OpenVivaLauncher"
+			 Startup="OnStartup">
+	<Application.Resources>
+		<ResourceDictionary>
+			<Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+				<Setter Property="FontFamily" Value="Arial"/>
+				<Setter Property="Background" Value="#444E7F"/>
+				<Setter Property="FontSize" Value="16"/>
+				<Setter Property="BorderBrush" Value="#F7CB71"/>
+				<Setter Property="BorderThickness" Value="2,2,2,2"/>
+			</Style>
+			<Style BasedOn="{StaticResource {x:Type ProgressBar}}" TargetType="ProgressBar">
+				<Setter Property="Background" Value="#a22200"/>
+				<Setter Property="Foreground" Value="#ff6e02"/>
+			</Style>
+		</ResourceDictionary>
+	</Application.Resources>
 </Application>

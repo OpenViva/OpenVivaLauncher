@@ -7,4 +7,59 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Assets\Images\close.png" />
+    <None Remove="Assets\Images\closered.png" />
+    <None Remove="Assets\Images\iconUpdate.png" />
+    <None Remove="Assets\Images\launcher.png" />
+    <None Remove="Assets\Images\launcherBoxLogo.ico" />
+    <None Remove="Assets\Images\launcherBoxLogo.png" />
+    <None Remove="Assets\Images\Vivaproject-Icon-200.png" />
+    <None Remove="Assets\Images\VivaProject-Icon-24.png" />
+    <None Remove="Assets\Images\VivaProjectLogoSplash_tiny.png" />
+    <None Remove="Assets\Images\VivaProjectLogo_tiny.png" />
+    <None Remove="Assets\Images\vivaProjectMiniLogo.png" />
+    <None Remove="Assets\Images\wrench-regular-24.png" />
+    <None Remove="Assets\Images\x-circle-regular-24.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Clowd.Squirrel" Version="2.8.40" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Semver" Version="2.0.5" />
+    <PackageReference Include="SharpCompress" Version="0.31.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Images\close.png" />
+    <Resource Include="Assets\Images\closered.png" />
+    <Resource Include="Assets\Images\iconUpdate.png" />
+    <Resource Include="Assets\Images\launcher.png" />
+    <Resource Include="Assets\Images\launcherBoxLogo.ico" />
+    <Resource Include="Assets\Images\launcherBoxLogo.png" />
+    <Resource Include="Assets\Images\Vivaproject-Icon-200.png" />
+    <Resource Include="Assets\Images\VivaProject-Icon-24.png" />
+    <Resource Include="Assets\Images\VivaProjectLogoSplash_tiny.png" />
+    <Resource Include="Assets\Images\VivaProjectLogo_tiny.png" />
+    <Resource Include="Assets\Images\vivaProjectMiniLogo.png" />
+    <Resource Include="Assets\Images\wrench-regular-24.png" />
+    <Resource Include="Assets\Images\x-circle-regular-24.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
