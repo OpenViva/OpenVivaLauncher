@@ -39,12 +39,6 @@ namespace Tests
 			releases.Keys.CopyTo(keys, 0);
 			_githubService.DownloadProgressChanged += (sender, e) =>
 			{
-				var thread = new Thread(() =>
-				{
-					TestContext.Out.WriteLine($"Download progress {e.BytesReceived}/{e.TotalBytesToReceive}bytes {e.ProgressPercentage}%");
-				});
-				thread.IsBackground = true;
-				thread.Start();
 			};
 			_githubService.DownloadComplete += (sender, e) => TestContext.Out.WriteLine("Download Complete.");
 			Assert.DoesNotThrowAsync(() => _githubService.DownloadVersionAsync(keys[0], _downloadLocation));

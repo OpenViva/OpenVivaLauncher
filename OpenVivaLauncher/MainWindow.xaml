@@ -20,10 +20,11 @@
 		<Grid.Background>
 			<ImageBrush ImageSource="Assets/Images/launcher.png"/>
 		</Grid.Background>
-		<Button x:Name="LaunchButton" Content="Play" HorizontalAlignment="Left" Margin="529,327,0,0" VerticalAlignment="Top" Width="150" Height="40" Foreground="White" Click="LaunchButton_OnClick"/>
+		<Button x:Name="LaunchButton" Content="Play" HorizontalAlignment="Left" Margin="529,327,0,0" VerticalAlignment="Top" Width="120" Height="40" Foreground="White" Click="LaunchButton_OnClick"/>
 		<ComboBox x:Name="VersionDropDown" HorizontalAlignment="Left" Margin="529,367,0,0" VerticalAlignment="Top" Width="150" Background="#FF444E7F" BorderBrush="#FFF7CB71" Loaded="VersionDropDown_OnLoaded" SelectionChanged="VersionDropDown_SelectionChanged"/>
 		<Button x:Name="Close" Content="Close" HorizontalAlignment="Left" Margin="613,105,0,0" VerticalAlignment="Top" Click="Close_OnClick"/>
 		<ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="10" Margin="529,317,0,0" VerticalAlignment="Top" Width="150"/>
+		<Button x:Name="DeleteButton" Content="🗑️" HorizontalAlignment="Left" Margin="649,327,0,0" VerticalAlignment="Top" Width="30" Height="40" Foreground="White" ToolTip="Delete function not implemented" Click="DeleteButton_OnClick"/>
 	</Grid>
 
 </Window>

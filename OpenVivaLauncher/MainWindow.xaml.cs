@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 using Semver;
 
 namespace OpenVivaLauncher
@@ -38,9 +39,13 @@ namespace OpenVivaLauncher
 			_gameService.DownloadComplete += _gameService_DownloadComplete;
 		}
 
-		private void _gameService_DownloadComplete(object? sender, System.Net.DownloadDataCompletedEventArgs e)
+		private void _gameService_DownloadComplete(object? sender, GameInstallCompleted e)
 		{
-			
+			if (_gameService.CheckGameInstalled(SelectedVersion.ToString()))
+			{
+				this.LaunchButton.IsEnabled = true;
+				this.LaunchButton.Content = "Play";
+			}
 		}
 
 		private void _gameService_DownloadProgressChanged(object? sender, System.Net.DownloadProgressChangedEventArgs e)
@@ -64,7 +69,10 @@ namespace OpenVivaLauncher
 		{
 			if (_versionInstalled)
 			{
-				
+				this.LaunchButton.Content = "Playing";
+				this.LaunchButton.IsEnabled = false;
+				this.LaunchButton.ToolTip = "You can't launch multiple instances!";
+				await this._gameService.StartGameProcess(this.SelectedVersion);
 			}
 			else
 			{
@@ -72,7 +80,7 @@ namespace OpenVivaLauncher
 				this.VersionDropDown.IsEnabled = false;
 				var releases = await _githubService.GetReleasesAsync();
 				string versionKey = releases.FirstOrDefault(x => x.Value == SelectedVersion).Key;
-				await _gameService.InstallGameVersion(versionKey);
+				await _gameService.InstallGameVersion(versionKey, releases[versionKey]);
 				this.LaunchButton.IsEnabled = true;
 				this.VersionDropDown.IsEnabled = true;
 			}
@@ -115,6 +123,12 @@ namespace OpenVivaLauncher
 				this.LaunchButton.Content = "Download";
 				this._versionInstalled = false;
 			}
+		}
+
+		private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			//todo: utilize gameService to delete related files
+			throw new NotImplementedException("The delete button has not been implemented");
 		}
 	}
 }

@@ -19,6 +19,8 @@ namespace OpenVivaLauncher
 
 		public App()
 		{
+			//globally catch exceptions and display a notification
+			Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
 			//Autoupdate
 			SquirrelAwareApp.HandleEvents(
 				onInitialInstall: OnAppInstall,
@@ -29,16 +31,31 @@ namespace OpenVivaLauncher
 			ServiceCollection services = new ServiceCollection();
 			ConfigureServices(services);
 			_serviceProvider = services.BuildServiceProvider();
+		}
 
+		private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+		{
+			ErrorWindow error = new ErrorWindow(e.Exception);
+			error.ShowDialog();
 		}
 
 		private async Task SquirrelStartup()
 		{
-			string repourl = "https://github/Openviva/OpenVivaLauncher";
-			using (var mgr = new GithubUpdateManager(repourl))
+			//System.Net.Http.HttpRequestException: 'Response status code does not indicate success: 404 (Not Found).'
+			try
 			{
-				await mgr.UpdateApp();
+				string repourl = "https://github.com/OpenViva/OpenVivaLauncher";
+				using (var mgr = new GithubUpdateManager(repourl))
+				{
+					await mgr.UpdateApp();
+				}
 			}
+			catch (System.Net.Http.HttpRequestException httpEx)
+			{
+				Console.WriteLine("Error in SquirrelStartup");
+				Console.WriteLine(httpEx.ToString());
+			}
+			
 		}
 
 		private void ConfigureServices(ServiceCollection services)
