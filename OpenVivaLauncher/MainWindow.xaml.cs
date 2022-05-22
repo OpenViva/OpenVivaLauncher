@@ -37,15 +37,18 @@ namespace OpenVivaLauncher
 
 			_gameService.DownloadProgressChanged += _gameService_DownloadProgressChanged;
 			_gameService.DownloadComplete += _gameService_DownloadComplete;
+			_gameService.GameProcessExited += _gameService_GameProcessExited;
+		}
+
+		private void _gameService_GameProcessExited(object? sender, GameProcessExitedArgs e)
+		{
+			UpdateLaunchButton();
+			this.LaunchButton.IsEnabled = true;
 		}
 
 		private void _gameService_DownloadComplete(object? sender, GameInstallCompleted e)
 		{
-			if (_gameService.CheckGameInstalled(SelectedVersion.ToString()))
-			{
-				this.LaunchButton.IsEnabled = true;
-				this.LaunchButton.Content = "Play";
-			}
+			UpdateLaunchButton();
 		}
 
 		private void _gameService_DownloadProgressChanged(object? sender, System.Net.DownloadProgressChangedEventArgs e)
@@ -62,7 +65,8 @@ namespace OpenVivaLauncher
 
 		private void Window_OnMouseDown(object sender, MouseButtonEventArgs e)
 		{
-
+			if (e.ChangedButton == MouseButton.Left)
+				this.DragMove();
 		}
 
 		private async void LaunchButton_OnClick(object sender, RoutedEventArgs e)
@@ -94,24 +98,20 @@ namespace OpenVivaLauncher
 		}
 		private async void VersionDropDown_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			
-			if (_gameService.CheckGameInstalled(SelectedVersion.ToString()))
-			{
-				this.LaunchButton.Content = "Play";
-				this._versionInstalled = true;
-			}
-			else
-			{
-				this.LaunchButton.Content = "Download";
-				this._versionInstalled = false;
-			}
+			UpdateLaunchButton();
 		}
 		private async void Close_OnClick(object sender, RoutedEventArgs e)
 		{
 			Environment.Exit(0);
 		}
 
-		private void DoVersionChangeUiChange()
+		private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			this._gameService.DeleteCurrentVersion(SelectedVersion);
+			UpdateLaunchButton();
+		}
+
+		private void UpdateLaunchButton()
 		{
 			if (_gameService.CheckGameInstalled(SelectedVersion.ToString()))
 			{
@@ -123,12 +123,6 @@ namespace OpenVivaLauncher
 				this.LaunchButton.Content = "Download";
 				this._versionInstalled = false;
 			}
-		}
-
-		private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
-		{
-			//todo: utilize gameService to delete related files
-			throw new NotImplementedException("The delete button has not been implemented");
 		}
 	}
 }

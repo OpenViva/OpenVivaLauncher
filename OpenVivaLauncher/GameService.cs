@@ -64,7 +64,9 @@ namespace OpenVivaLauncher
 			this.GameProcess.Start();
 			await this.GameProcess.WaitForExitAsync();
 
-			GameProcessExited(this, new GameProcessExitedArgs(this.GameProcess.ExitCode, this.GameProcessStdErr));
+			EventHandler<GameProcessExitedArgs> handler = GameProcessExited;
+			if (handler != null)
+				handler(this, new GameProcessExitedArgs(this.GameProcess.ExitCode, this.GameProcessStdErr));
 			//List<string> errors = new List<string>();
 
 			//while (!this.GameProcess.HasExited)
@@ -72,14 +74,29 @@ namespace OpenVivaLauncher
 			//	errors.Add(await this.GameProcess.StandardError.ReadLineAsync());
 			//}
 		}
+
+		public void DeleteCurrentVersion(SemVersion semVer)
+		{
+			try
+			{
+				Directory.Delete($"{InstallLocation}{semVer}", true);
+			}
+			catch (Exception ex)
+			{
+				new ErrorWindow(ex).ShowDialog();
+			}
+		}
+
 		private void _githubService_DownloadComplete(object? sender, DownloadDataCompletedEventArgs e)
 		{
 			//DownloadComplete(this, new GameInstallCompleted(e));
 		}
+
 		private void _githubService_DownloadProgressChanged(object? sender, System.Net.DownloadProgressChangedEventArgs e)
 		{
 			DownloadProgressChanged(sender, e);
 		}
+
 		private void DecompressToDirectoryAsync(string path, string target, SemVersion semVer)
 		{
 			using (var archive = RarArchive.Open(path))

@@ -27,7 +27,17 @@ namespace OpenVivaLauncher
 				onAppUninstall: OnAppUninstall,
 				onEveryRun: OnAppRun);
 
-			SquirrelStartup().GetAwaiter().GetResult(); //allow squirrel startup to run async
+			try
+			{
+				SquirrelStartup().GetAwaiter().GetResult(); //allow squirrel startup to run async
+			}
+			catch (Exception ex)
+			{
+				new ErrorWindow(ex).ShowDialog();
+				Environment.Exit(1);
+			}
+
+			
 			ServiceCollection services = new ServiceCollection();
 			ConfigureServices(services);
 			_serviceProvider = services.BuildServiceProvider();
@@ -41,6 +51,13 @@ namespace OpenVivaLauncher
 
 		private async Task SquirrelStartup()
 		{
+			/*
+			Squirrel will throw an error on startup if the launcher was not installed using the squirrel installer
+			(which we don't do in development scenarios). Prevent the update system from starting by returning here
+			*/
+#if DEBUG
+			return;
+#endif
 			//System.Net.Http.HttpRequestException: 'Response status code does not indicate success: 404 (Not Found).'
 			try
 			{
