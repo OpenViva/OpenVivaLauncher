@@ -14,7 +14,7 @@ using System.Diagnostics;
 
 namespace OpenVivaLauncher
 {
-	
+
 	public class GameService
 	{
 
@@ -38,7 +38,7 @@ namespace OpenVivaLauncher
 
 		public bool CheckGameInstalled(string version)
 		{
-			return File.Exists($"{InstallLocation}{version}\\viva.exe");
+			return File.Exists($"{InstallLocation}{version}\\viva.exe") || File.Exists($"{InstallLocation}{version}\\Viva Project.exe") || File.Exists($"{InstallLocation}{version}\\VivaProject.exe");
 		}
 		public async Task InstallGameVersion(string version, SemVersion semVer)
 		{
@@ -49,10 +49,19 @@ namespace OpenVivaLauncher
 		}
 		public async Task StartGameProcess(SemVersion semVer)
 		{
+			//check which exe we have
+			string filename = "";
+			if (File.Exists($"{InstallLocation}{semVer}\\Viva Project.exe"))
+				filename = "Viva Project.exe";
+			else if (File.Exists($"{InstallLocation}{semVer}\\VivaProject.exe"))
+				filename = "VivaProject.exe";
+			else
+				filename = "viva.exe";
+
 			ProcessStartInfo processStartInfo = new ProcessStartInfo();
 			processStartInfo.UseShellExecute = false;
 			processStartInfo.WorkingDirectory = $"{InstallLocation}{semVer}";
-			processStartInfo.FileName = "viva.exe";
+			processStartInfo.FileName = filename;
 			//processStartInfo.RedirectStandardError = true;
 			processStartInfo.UseShellExecute = true;
 
@@ -99,20 +108,53 @@ namespace OpenVivaLauncher
 
 		private void DecompressToDirectoryAsync(string path, string target, SemVersion semVer)
 		{
-			using (var archive = RarArchive.Open(path))
-			{
-				string root = archive.Entries.First().Key.Split("\\")[0];
-				foreach (var entry in archive.Entries.Where(entry => !entry.IsDirectory))
-				{
-					entry.WriteToDirectory(target, new ExtractionOptions()
-					{
-						ExtractFullPath = true,
-						Overwrite = true,
+			//shared variables
+			string text = "";
+			string root = "";
 
-					});
-				}
-				Directory.Move($"{target}\\{root}", $"{target}\\{semVer}");
+			//read magic bytes
+			using (var reader = new BinaryReader(new StreamReader(path).BaseStream))
+			{
+				byte[] bytes = reader.ReadBytes(2);
+				text = ASCIIEncoding.ASCII.GetString(bytes);
 			}
+
+			//if it's the self extractor, run it
+			if (text == "MZ")
+			{
+				Process process = new Process();
+				process.StartInfo.FileName = path;
+				process.StartInfo.Arguments = $" -o\"{target}\\extracted\" -y";
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+
+				process.Start();
+				string output = process.StandardOutput.ReadToEnd();
+				process.WaitForExit();
+
+				//read root directory
+				root = "\\extracted\\" + Path.GetFileName(Directory.GetDirectories(target + "\\extracted")[0]);
+			}
+			//otherwise use rar extractor
+			else
+			{
+				using (var archive = RarArchive.Open(path))
+				{
+					root = archive.Entries.First().Key.Split("\\")[0];
+					foreach (var entry in archive.Entries.Where(entry => !entry.IsDirectory))
+					{
+						entry.WriteToDirectory(target, new ExtractionOptions()
+						{
+							ExtractFullPath = true,
+							Overwrite = true,
+
+						});
+					}
+				}
+			}
+			//finally, move file and complete
+			Directory.Move($"{target}\\{root}", $"{target}\\{semVer}");
 			DownloadComplete(this, new GameInstallCompleted());
 		}
 
