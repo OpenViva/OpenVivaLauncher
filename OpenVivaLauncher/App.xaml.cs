@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿ using Microsoft.Extensions.DependencyInjection;
 using Squirrel;
 using System;
 using System.Collections.Generic;
@@ -27,15 +27,15 @@ namespace OpenVivaLauncher
 				onAppUninstall: OnAppUninstall,
 				onEveryRun: OnAppRun);
 
-			try
-			{
-				SquirrelStartup().GetAwaiter().GetResult(); //allow squirrel startup to run async
-			}
-			catch (Exception ex)
-			{
-				new ErrorWindow(ex).ShowDialog();
-				Environment.Exit(1);
-			}
+			//try
+			//{
+			//	SquirrelStartup().GetAwaiter().GetResult(); //allow squirrel startup to run async
+			//}
+			//catch (Exception ex)
+			//{
+			//	new ErrorWindow(ex).ShowDialog();
+			//	Environment.Exit(1);
+			//}
 
 			
 			ServiceCollection services = new ServiceCollection();
@@ -49,31 +49,31 @@ namespace OpenVivaLauncher
 			error.ShowDialog();
 		}
 
-		private async Task SquirrelStartup()
-		{
+		//private async Task SquirrelStartup()
+		//{
 			/*
 			Squirrel will throw an error on startup if the launcher was not installed using the squirrel installer
 			(which we don't do in development scenarios). Prevent the update system from starting by returning here
 			*/
-#if DEBUG
-			return;
-#endif
-			//System.Net.Http.HttpRequestException: 'Response status code does not indicate success: 404 (Not Found).'
-			try
-			{
-				string repourl = "https://github.com/OpenViva/OpenVivaLauncher";
-				using (var mgr = new GithubUpdateManager(repourl))
-				{
-					await mgr.UpdateApp();
-				}
-			}
-			catch (System.Net.Http.HttpRequestException httpEx)
-			{
-				Console.WriteLine("Error in SquirrelStartup");
-				Console.WriteLine(httpEx.ToString());
-			}
+//#if DEBUG
+//			return;
+//#endif
+//			//System.Net.Http.HttpRequestException: 'Response status code does not indicate success: 404 (Not Found).'
+//			try
+//			{
+//				string repourl = "https://github.com/OpenViva/OpenVivaLauncher";
+//				using (var mgr = new GithubUpdateManager(repourl))
+//				{
+//					await mgr.UpdateApp();
+//				}
+//			}
+//			catch (System.Net.Http.HttpRequestException httpEx)
+//			{
+//				Console.WriteLine("Error in SquirrelStartup");
+//				Console.WriteLine(httpEx.ToString());
+//			}
 			
-		}
+		//}
 
 		private void ConfigureServices(ServiceCollection services)
 		{
@@ -84,9 +84,8 @@ namespace OpenVivaLauncher
 
 		private void OnStartup(object sender, StartupEventArgs e)
 		{
-			var mainWindow = _serviceProvider.GetService<MainWindow>();
-			mainWindow.Show();
-		}
+            _serviceProvider.GetService<MainWindow>()!.ShowDialog();
+        }
 
 		private static void OnAppInstall(SemanticVersion version, IAppTools tools)
 		{

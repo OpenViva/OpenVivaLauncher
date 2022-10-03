@@ -30,6 +30,7 @@ namespace OpenVivaLauncher
 		private readonly GameService _gameService;
 		public MainWindow(GithubService github, GameService gameService)
 		{
+			new StartupWIndow().ShowDialog();
 			InitializeComponent();
 
 			this._githubService = github;
@@ -44,6 +45,7 @@ namespace OpenVivaLauncher
 		{
 			UpdateLaunchButton();
 			this.LaunchButton.IsEnabled = true;
+			this.DeleteButton.IsEnabled = true;
 		}
 
 		private void _gameService_DownloadComplete(object? sender, GameInstallCompleted e)
@@ -75,7 +77,8 @@ namespace OpenVivaLauncher
 			{
 				this.LaunchButton.Content = "Playing";
 				this.LaunchButton.IsEnabled = false;
-				this.LaunchButton.ToolTip = "You can't launch multiple instances!";
+                this.DeleteButton.IsEnabled = false;
+                this.LaunchButton.ToolTip = "You can't launch multiple instances!";
 				await this._gameService.StartGameProcess(this.SelectedVersion);
 			}
 			else
@@ -116,11 +119,13 @@ namespace OpenVivaLauncher
 			if (_gameService.CheckGameInstalled(SelectedVersion.ToString()))
 			{
 				this.LaunchButton.Content = "Play";
-				this._versionInstalled = true;
+                this.DeleteButton.IsEnabled = true;
+                this._versionInstalled = true;
 			}
 			else
 			{
 				this.LaunchButton.Content = "Download";
+				this.DeleteButton.IsEnabled = false;
 				this._versionInstalled = false;
 			}
 		}
