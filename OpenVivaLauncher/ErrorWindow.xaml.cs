@@ -61,7 +61,7 @@ namespace OpenVivaLauncher
 		}
 		private void IssueTrackerButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			Process.Start("https://bitbucket.org/RealStillkill/viva-launcher/issues?status=new&status=open");
+			Process.Start(new ProcessStartInfo("https://github.com/OpenViva/OpenVivaLauncher/issues/new") { UseShellExecute = true });
 		}
 		public void LogException(System.Exception ex)
 		{
