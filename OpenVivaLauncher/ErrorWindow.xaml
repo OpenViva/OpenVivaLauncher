@@ -4,7 +4,7 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		mc:Ignorable="d"
-		Title="Error" Height="400" Width="600" ResizeMode="NoResize" Loaded="ErrorWindow_OnLoad" WindowStartupLocation="CenterOwner">
+		Title="Error" Height="400" Width="600" ResizeMode="NoResize" Loaded="ErrorWindow_OnLoad" WindowStartupLocation="CenterOwner" Icon="/Assets/Images/closered.png">
 	<Grid Background="Black">
 		<Label Content="An exception has occurred. These are the details. Post this to the Issue Tracker if this continues." HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="575" Background="#FFE67070"/>
 		<ScrollViewer Margin="10,41,9.667,37">

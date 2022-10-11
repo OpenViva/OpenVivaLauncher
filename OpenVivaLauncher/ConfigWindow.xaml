@@ -1,0 +1,35 @@
+﻿<Window x:Class="OpenVivaLauncher.ConfigWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OpenVivaLauncher"
+        mc:Ignorable="d"
+        Loaded="ConfigWindow_Loaded"
+        Title="Config" Height="450" Width="800" Icon="/Assets/Images/settings-transparent.png">
+    <Grid Background="#FF3C3C3C">
+        <Button Name="BrowseButton" Content="Browse" HorizontalAlignment="Left" Height="32" Margin="284,70,0,0" VerticalAlignment="Top" Width="116" Foreground="White " Click="Browse_OnClick"/>
+        <TextBox Name="FolderText" HorizontalAlignment="Left" Margin="18,75,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="214" IsReadOnly="True" TextChanged="FolderText_TextChanged">
+            <TextBox.LayoutTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </TextBox.LayoutTransform>
+        </TextBox>
+        <Label Content="Game Install Location" HorizontalAlignment="Left" Margin="64,39,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
+        <CheckBox x:Name="UpdateCheckBox" HorizontalAlignment="Left" Margin="18,117,0,0" VerticalAlignment="Top" Foreground="White" Content="Check For Launcher Updates" Checked="UpdateCheckBox_Checked" Unchecked="UpdateCheckBox_Unchecked" IsChecked="False" VerticalContentAlignment="Center" MinWidth="3" MinHeight="3" HorizontalContentAlignment="Center" FontSize="11">
+            <CheckBox.LayoutTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="1.6" ScaleY="1.6"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </CheckBox.LayoutTransform>
+        </CheckBox>
+
+    </Grid>
+</Window>

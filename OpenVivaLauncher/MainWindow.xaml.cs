@@ -30,7 +30,7 @@ namespace OpenVivaLauncher
 		private readonly GameService _gameService;
 		public MainWindow(GithubService github, GameService gameService)
 		{
-			new StartupWIndow().ShowDialog();
+			new StartupWindow().ShowDialog();
 			InitializeComponent();
 
 			this._githubService = github;
@@ -128,6 +128,11 @@ namespace OpenVivaLauncher
 				this.DeleteButton.IsEnabled = false;
 				this._versionInstalled = false;
 			}
+		}
+
+		private void ConfigButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			new ConfigWindow().ShowDialog();
 		}
 	}
 }

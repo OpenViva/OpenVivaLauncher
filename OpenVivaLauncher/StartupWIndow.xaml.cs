@@ -19,40 +19,42 @@ namespace OpenVivaLauncher
     /// <summary>
     /// Interaction logic for StartupWIndow.xaml
     /// </summary>
-    public partial class StartupWIndow : Window
+    public partial class StartupWindow : Window
     {
-        public StartupWIndow()
+        private Config cfg;
+        public StartupWindow()
         {
+            cfg = Config.GetSettings();
             InitializeComponent();
-            base.Loaded += StartupWindow_Loaded;
-            base.MouseDown += StartupWindow_OnMouseDown;
         }
 
         private async void StartupWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            
-            SetProgressBar(1, "Checking for folder existance " + Directories.GameInstallLocation, 0, 4);
-            if (!Directory.Exists(Directories.GameInstallLocation))
+            SetProgressBar(1, "Checking for folder existance " + cfg.GameInstallLocation, 0, 4);
+            if (!Directory.Exists(cfg.GameInstallLocation))
             {
-                SetProgressBar(2, "Folder Not Found, Creating " + Directories.GameInstallLocation, 0, 4);
-                Directory.CreateDirectory(Directories.GameInstallLocation);
+                SetProgressBar(2, "Folder Not Found, Creating " + cfg.GameInstallLocation, 0, 4);
+                Directory.CreateDirectory(cfg.GameInstallLocation);
             }
-            try
+            if (cfg.CheckforLauncherUpdates)
             {
-                SetProgressBar(3, "Checking for updates", 0, 4);
-                string repourl = "https://github.com/OpenViva/OpenVivaLauncher";
-                using var mgr = new GithubUpdateManager(repourl);
-                if (await mgr.UpdateApp() != null)
+                try
                 {
-                    SetProgressBar(4, "Update installed Restarting", 0, 4);
-                    await Task.Delay(1000);
-                    GithubUpdateManager.RestartApp();
+                    SetProgressBar(3, "Checking for updates", 0, 4);
+                    string repourl = "https://github.com/OpenViva/OpenVivaLauncher";
+                    using var mgr = new GithubUpdateManager(repourl);
+                    if (await mgr.UpdateApp() != null)
+                    {
+                        SetProgressBar(4, "Update installed Restarting", 0, 4);
+                        await Task.Delay(1000);
+                        GithubUpdateManager.RestartApp();
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                new ErrorWindow(ex, "Updater").ShowDialog();
-            }
+                catch (Exception ex)
+                {
+                    new ErrorWindow(ex, "Updater").ShowDialog();
+                }
+            }            
             Close();
         }
 

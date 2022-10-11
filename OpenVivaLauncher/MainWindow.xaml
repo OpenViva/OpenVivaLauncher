@@ -26,6 +26,11 @@
         <Button x:Name="Close" Content="❌" HorizontalAlignment="Left" Margin="636,94,0,0" VerticalAlignment="Top" Click="Close_OnClick" Background="Red" Foreground="White"/>
         <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="10" Margin="530,341,0,0" VerticalAlignment="Top" Width="150"/>
         <Button x:Name="DeleteButton" Content="🗑️" HorizontalAlignment="Left" Margin="650,351,0,0" VerticalAlignment="Top" Width="30" Height="40" Foreground="White" Click="DeleteButton_OnClick"/>
+        <Button x:Name="ConfigButton" HorizontalAlignment="Left" Margin="495,351,0,0" VerticalAlignment="Top" Foreground="White" Width="35" Height="40" Click="ConfigButton_OnClick">
+            <Button.Background>
+                <ImageBrush ImageSource="/Assets/Images/settings.png"/>
+            </Button.Background>
+        </Button>
     </Grid>
 
 </Window>

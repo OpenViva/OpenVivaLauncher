@@ -19,11 +19,13 @@ namespace OpenVivaLauncher
 	{
 
 		private readonly GithubService _githubService;
+		private Config cfg;
 		private Process GameProcess;
 		private string GameProcessStdErr = "";
 
 		public GameService(GithubService github)
 		{
+			cfg = Config.GetSettings();
 			_githubService = github;
 
 			_githubService.DownloadProgressChanged += _githubService_DownloadProgressChanged;
@@ -34,33 +36,31 @@ namespace OpenVivaLauncher
 		public event EventHandler<DownloadProgressChangedEventArgs> DownloadProgressChanged;
 		public event EventHandler<GameProcessExitedArgs> GameProcessExited;
 
-		public string InstallLocation { get; set; } = $"{Directories.Appdata}\\OpenVivaLauncher\\Game\\";
-
 		public bool CheckGameInstalled(string version)
 		{
-			return File.Exists($"{InstallLocation}{version}\\viva.exe") || File.Exists($"{InstallLocation}{version}\\Viva Project.exe") || File.Exists($"{InstallLocation}{version}\\VivaProject.exe");
+			return File.Exists($"{cfg.GameInstallLocation}{version}\\viva.exe") || File.Exists($"{cfg.GameInstallLocation}{version}\\Viva Project.exe") || File.Exists($"{cfg.GameInstallLocation}{version}\\VivaProject.exe");
 		}
 		public async Task InstallGameVersion(string version, SemVersion semVer)
 		{
 			string temp = Path.GetTempFileName();
 			await _githubService.DownloadVersionAsync(version, temp);
-			DecompressToDirectoryAsync(temp, InstallLocation, semVer);
+			DecompressToDirectoryAsync(temp, cfg.GameInstallLocation, semVer);
 			File.Delete(temp);
 		}
 		public async Task StartGameProcess(SemVersion semVer)
 		{
 			//check which exe we have
 			string filename = "";
-			if (File.Exists($"{InstallLocation}{semVer}\\Viva Project.exe"))
+			if (File.Exists($"{cfg.GameInstallLocation}{semVer}\\Viva Project.exe"))
 				filename = "Viva Project.exe";
-			else if (File.Exists($"{InstallLocation}{semVer}\\VivaProject.exe"))
+			else if (File.Exists($"{cfg.GameInstallLocation}{semVer}\\VivaProject.exe"))
 				filename = "VivaProject.exe";
 			else
 				filename = "viva.exe";
 
 			ProcessStartInfo processStartInfo = new ProcessStartInfo();
 			processStartInfo.UseShellExecute = false;
-			processStartInfo.WorkingDirectory = $"{InstallLocation}{semVer}";
+			processStartInfo.WorkingDirectory = $"{cfg.GameInstallLocation}{semVer}";
 			processStartInfo.FileName = filename;
 			//processStartInfo.RedirectStandardError = true;
 			processStartInfo.UseShellExecute = true;
@@ -88,7 +88,7 @@ namespace OpenVivaLauncher
 		{
 			try
 			{
-				Directory.Delete($"{InstallLocation}{semVer}", true);
+				Directory.Delete($"{cfg.GameInstallLocation}{semVer}", true);
 			}
 			catch (Exception ex)
 			{
@@ -124,7 +124,7 @@ namespace OpenVivaLauncher
 			{
 				Process process = new Process();
 				process.StartInfo.FileName = path;
-				process.StartInfo.Arguments = $" -o\"{target}\\Openviva\" -y";
+				process.StartInfo.Arguments = $" -o\"{target}\" -y";
 				process.StartInfo.RedirectStandardOutput = true;
 				process.StartInfo.UseShellExecute = false;
 				process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -134,7 +134,7 @@ namespace OpenVivaLauncher
 				process.WaitForExit();
 
 				//read root directory
-				root = "\\Openviva\\" + Path.GetFileName(Directory.GetDirectories(target + "\\Openviva")[0]);
+				root = Path.GetFileName(Directory.GetDirectories(target + "\\")[0]);
 			}
 			//otherwise use rar extractor
 			else
